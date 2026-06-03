@@ -1,10 +1,12 @@
 const express = require("express");
-const main = express.Router();
+const {TITLE} = require("./config");
 
+// create main router
+const main = express.Router();
 
 // index route path
 main.get("/", (req, res) => {
-    res.render("index.ejs" );
+    res.render("index.ejs", {title: TITLE} );
 })
 
 
