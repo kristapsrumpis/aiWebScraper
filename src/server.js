@@ -1,7 +1,6 @@
 const express = require("express");
 const path = require("path");
-const main = require("./routes");  // import main routes
-
+const main = require("./routes"); // import main routes
 
 const app = express();
 
@@ -15,10 +14,15 @@ app.set("views", path.join(process.cwd(), "views"));
 app.use(express.static(path.join(process.cwd(), "public")));
 
 // add bootstrap to project
-app.use("/bootstrap", express.static(path.join(process.cwd(), "node_modules/bootstrap/dist")));
+app.use(
+  "/bootstrap",
+  express.static(path.join(process.cwd(), "node_modules/bootstrap/dist")),
+);
 
+// add json suport for express app
+app.use(express.json());
 
 // register routes
-app.use("/", main)
+app.use("/", main);
 
-module.exports = {app};
+module.exports = { app };
