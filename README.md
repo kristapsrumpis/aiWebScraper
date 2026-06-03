@@ -1,0 +1,1 @@
+Upcoming project will be ai web scraper based on lockal docker Ollama light ai models
