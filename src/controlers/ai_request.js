@@ -1,12 +1,25 @@
 // const {} = require("./../config");
+const { scrapePage } = require("./../services/scraperService");
+const { callAI } = require("./../services/aiService");
 
-function ai_request(req, res) {
+async function ai_request(req, res) {
   const data = req.body;
-  console.log("recived:", data);
+  let page;
+  let aiResponse;
 
+  try {
+    page = await scrapePage(data.userInputURI);
+    aiResponse = await callAI(data.userInputPrompt);
+  } catch (err) {
+    return {
+      success: false,
+      error: err,
+    };
+  }
   res.json({
     status: 200,
-    recived: data,
+    success: true,
+    response: aiResponse,
   });
 }
 

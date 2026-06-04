@@ -1,9 +1,9 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-async function scrapePage(url) {
+async function scrapePage(uri) {
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(uri);
     const html = response.data;
     const $ = cheerio.load(html);
     return {
@@ -20,4 +20,4 @@ async function scrapePage(url) {
   }
 }
 
-module.exports = scrapePage;
+module.exports = { scrapePage };

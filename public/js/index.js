@@ -28,10 +28,10 @@ const userInputPromt = document.querySelector("#userInput");
 userInputSubmitBtn.addEventListener("click", () => {
   const data = {
     userInputURI: userInputURI.value,
-    userInputPromt: userInputPromt.value,
+    userInputPrompt: userInputPromt.value,
   };
   const response = request(AI_REQUEST_POST_ROUTE, "POST", data);
   response.then((d) => {
-    document.querySelector("#resp").innerHTML = JSON.stringify(d);
+    document.querySelector("#resp").innerHTML = d.response.response;
   });
 });
