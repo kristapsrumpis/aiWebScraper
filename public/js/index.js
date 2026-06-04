@@ -27,6 +27,6 @@ userInputSubmitBtn.addEventListener("click", () => {
   };
   const response = request(AI_REQUEST_POST_ROUTE, "POST", data);
   response.then((d) => {
-    console.log("Frontend recived:", d);
+    alert("Frontend recived:", d);
   });
 });

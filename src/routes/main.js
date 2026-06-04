@@ -1,6 +1,6 @@
 const express = require("express");
 const { INDEX_ROUTE, AI_REQUEST_POST_ROUTE } = require("./../config");
-const index_route = require("./../controlers/main");
+const index_route = require("../controlers/index");
 const ai_request = require("./../controlers/ai_request");
 
 // create main router
