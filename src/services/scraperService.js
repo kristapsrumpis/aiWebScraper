@@ -19,3 +19,5 @@ async function scrapePage(url) {
     };
   }
 }
+
+module.exports = scrapePage;
