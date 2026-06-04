@@ -1,13 +1,18 @@
 // asyn fech function resusable
 async function request(path, method, data) {
-  const res = await fetch(`${APP_URI}${PORT}${path}`, {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  return res.json();
+  try {
+    const res = await fetch(`${APP_URI}${PORT}${path}`, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  } catch (error) {
+    console.error("API error:", err.response?.data || err.message);
+    throw err;
+  }
 }
 
 // gets user input submit button
@@ -27,6 +32,6 @@ userInputSubmitBtn.addEventListener("click", () => {
   };
   const response = request(AI_REQUEST_POST_ROUTE, "POST", data);
   response.then((d) => {
-    alert("Frontend recived:", d);
+    document.querySelector("#resp").innerHTML = JSON.stringify(d);
   });
 });
