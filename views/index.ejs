@@ -11,11 +11,11 @@
     <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
-    <div class="container mt-4 border p-4 shadow-lg rounded">
+    <div class="container mt-4 p-4">
         <div class="row text-center">
             <h1><%= title %></h1>
         </div>
-        <div class="row">
+        <div class="row p-4 border rounded shadow">
             <!-- Input form runs on js script  -->
             <div class="mb-3">
                 <label for="uri" class="form-label">Enter URI Link</label>
@@ -27,7 +27,8 @@
             </div>
             <button id="userInputSubmitBtn" type="button" class="btn btn-secondary col-2 ms-3">Submit</button>
         </div>
-        <div class="row">
+        <div class="row mt-4 p-4 border rounded shadow">
+            AI response will come here
             <!-- Response will be put in this block -->
             <div id="resp"></div>
         </div>

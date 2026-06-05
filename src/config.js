@@ -23,6 +23,12 @@ const AI_REQUEST_PORT = 11434;
 // AI model name
 const AI_MODEL_NAME = "gemma:2b-instruct-q4_K_M";
 
+// Ai memory stored in ./../memory/memory.json
+const AI_MEMORY_DIR = "./../memory";
+
+// AI memory file name
+const AI_MEMORY_FILE = "memory.json";
+
 module.exports = {
   PORT,
   APP_URI,
@@ -32,4 +38,6 @@ module.exports = {
   AI_REQUEST_URI,
   AI_REQUEST_PORT,
   AI_MODEL_NAME,
+  AI_MEMORY_DIR,
+  AI_MEMORY_FILE,
 };
