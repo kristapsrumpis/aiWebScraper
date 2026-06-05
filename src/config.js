@@ -29,6 +29,9 @@ const AI_MEMORY_DIR = "./../memory";
 // AI memory file name
 const AI_MEMORY_FILE = "memory.json";
 
+// AI agent instructions
+const AI_AGENT_INSTRUCTIONS = require("./memory/agentInstructions.json");
+
 module.exports = {
   PORT,
   APP_URI,
@@ -40,4 +43,5 @@ module.exports = {
   AI_MODEL_NAME,
   AI_MEMORY_DIR,
   AI_MEMORY_FILE,
+  AI_AGENT_INSTRUCTIONS,
 };

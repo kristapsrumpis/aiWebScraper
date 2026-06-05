@@ -1,6 +1,12 @@
 // const {} = require("./../config");
 const { scrapePage } = require("./../services/scraperService");
 const { callAI } = require("./../services/aiService");
+const { AI_AGENT_INSTRUCTIONS } = require("./../config");
+const {
+  loadMemory,
+  updateMemory,
+  saveMemory,
+} = require("./../services/memoryService");
 
 async function ai_request(req, res) {
   const data = req.body;
