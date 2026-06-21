@@ -1,7 +1,7 @@
 const { runAgent } = require("../services/agentLoop");
 
 async function ai_request(req, res) {
-  const result = runAgent(req.body);
+  const result = await runAgent(req.body);
 
   res.json({
     status: 200,

@@ -1,7 +1,15 @@
 const { callAI } = require("./aiService");
 const { scrapePage } = require("./scraperService");
 const { loadMemory, updateMemory } = require("./memoryService");
-const { response } = require("express");
+const agentInstructions = require("../memory/agentInstructions.json");
+
+// function cleans  ai JSON respons make sure is clean json
+function cleanAIResponse(text) {
+  return text
+    .replace(/```json/gi, "")
+    .replace(/```/g, "")
+    .trim();
+}
 
 async function runAgent(userInput) {
   let memory = loadMemory();
@@ -11,7 +19,7 @@ async function runAgent(userInput) {
   while (continueLoop) {
     const prompt = `
     SYSTEM INSTRUCTIONS:
-    ${JSON.stringify(require("../memory/agent_instructions.json"), null, 2)}
+    ${JSON.stringify(agentInstructions, null, 2)}
 
     MEMORY:
     ${JSON.stringify(memory, null, 2)}
@@ -26,26 +34,56 @@ async function runAgent(userInput) {
     `;
 
     const ai = await callAI(prompt);
+    // debuging purpose to fallow ai responses
+    console.log("AI RAW RESPONSE: ", ai.response);
 
     let parsed;
     try {
-      parsed = JSON.parse(ai.response);
+      // cleans ai respons make sure returned clan JSON file
+      const cleaned = cleanAIResponse(ai.response);
+      parsed = JSON.parse(cleaned);
     } catch (err) {
       return { error: "AI returned invalid JSON", row: ai.response };
     }
 
+    // Auto Wrap Raw Data (special cases for ai to self inprove on next step)
+    if (!parsed.action) {
+      parsed = {
+        action: "return_data",
+        raw: ai.response,
+        data: parsed,
+      };
+    }
+
+    // validate JSON shape to fallow set instructions
+    if (!parsed.action || !parsed.data) {
+      return {
+        error: "AI returned JSON but not in the required {action, data} format",
+        row: ai.response,
+      };
+    }
+
     const { action, data } = parsed;
     switch (action) {
+      // Scraps link wich is requested
       case "scrape_page":
         lastResult = await scrapePage(data.url);
         break;
 
+      // update memory
       case "update_memory":
         updateMemory(data.key, data.value);
         memory = loadMemory();
         lastResult = { status: "memory updated" };
         break;
 
+      case "return_data":
+        updateMemory("last_result", data);
+        memory = loadMemory();
+        lastResult = data;
+        break;
+
+      // finish scraping process
       case "finish":
         continueLoop = false;
         lastResult = data;

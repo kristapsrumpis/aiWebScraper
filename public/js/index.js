@@ -32,6 +32,10 @@ userInputSubmitBtn.addEventListener("click", () => {
   };
   const response = request(AI_REQUEST_POST_ROUTE, "POST", data);
   response.then((d) => {
-    document.querySelector("#resp").innerHTML = d.response.response;
+    document.querySelector("#resp").innerHTML = JSON.stringify(
+      d.response,
+      null,
+      2,
+    );
   });
 });

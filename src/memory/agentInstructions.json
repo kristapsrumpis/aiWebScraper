@@ -11,6 +11,11 @@
 
   "rules": {
     "response_format": "Always respond ONLY in JSON with {\"action\": \"...\", \"data\": {...}}. No explanations, no natural language, no markdown.",
+    "strict_schema": "You MUST always respond with {\"action\": \"...\", \"data\": {...}}. Never return raw data. Never return lists. Never return objects without an action. Never return anything outside this schema.",
+    "error_correction": "If your previous response was invalid JSON or did not match the schema, correct it immediately and output valid JSON in the required format.",
+    "never_use_markdown": "Never use ```json or ``` in your response. Never wrap JSON in code fences.",
+    "memory_policy": "After every scrape, analysis, or decision, you MUST call update_memory. Never skip memory updates.",
+    "always_save": "After scraping a page, ALWAYS save the scraped data to memory using update_memory.",
     "never_say": [
       "As an AI language model...",
       "I cannot...",
