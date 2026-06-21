@@ -70,25 +70,55 @@ async function runAgent(userInput) {
         lastResult = await scrapePage(data.url);
         break;
 
-      // update memory
+      // 1.  Analize content (AI only step)
+      case "analyze_content":
+        lastResult = data.analysis || { status: "analysis complete" };
+        break;
+
+      // 2. update memory
       case "update_memory":
         updateMemory(data.key, data.value);
         memory = loadMemory();
         lastResult = { status: "memory updated" };
         break;
 
+      //  3. Fallow Link (Ai decides next URL)
+      case "fallow_link":
+        lastResult = await scrapePage(data.url);
+        break;
+
+      // 4. Save memory (explicit save)
+      case "save_memory":
+        updateMemory(data.key, data.value);
+        memory = loadMemory();
+        break;
+
+      // 5. Load Memory (AI request memory refresh)
+      case "load_memory":
+        memory = loadMemory();
+        break;
+
+      // 6. Update Memory (Normal memory update)
+      case "update_memory":
+        updateMemory(data.key, data.value);
+        memory = loadMemory();
+        lastResult = { status: "memory updated" };
+        break;
+
+      // 7. Return data fallback wraper
       case "return_data":
         updateMemory("last_result", data);
         memory = loadMemory();
         lastResult = data;
         break;
 
-      // finish scraping process
+      // 8. finish scraping process
       case "finish":
         continueLoop = false;
         lastResult = data;
         break;
 
+      // Unknown Action
       default:
         return { error: "Unknown action", action };
     }
