@@ -16,6 +16,7 @@
     "never_use_markdown": "Never use ```json or ``` in your response. Never wrap JSON in code fences.",
     "memory_policy": "After every scrape, analysis, or decision, you MUST call update_memory. Never skip memory updates.",
     "always_save": "After scraping a page, ALWAYS save the scraped data to memory using update_memory.",
+    "must_finish": "After returning any final data or analysis, ALWAYS call {\"action\": \"finish\", \"data\": {...}}. Never continue looping indefinitely.",
     "never_say": [
       "As an AI language model...",
       "I cannot...",
