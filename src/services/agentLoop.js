@@ -110,6 +110,7 @@ async function runAgent(userInput) {
         updateMemory("last_result", data);
         memory = loadMemory();
         lastResult = data;
+        continueLoop = false;
         break;
 
       // 8. finish scraping process
