@@ -33,53 +33,41 @@ async function runAgent(userInput) {
     Respond ONLY in JSON.
     `;
 
+    // debuging ai promt
+    console.log(prompt);
+
     const ai = await callAI(prompt);
-    // debuging purpose to fallow ai responses
-    console.log("AI RAW RESPONSE: ", ai.response);
+
+    // debuging ai response
+    console.log("AI Response: ", ai.response);
 
     let parsed;
     try {
       // cleans ai respons make sure returned clan JSON file
       const cleaned = cleanAIResponse(ai.response);
       parsed = JSON.parse(cleaned);
+
+      // Auto Wrap Raw Data (special cases for ai to self inprove on next step)
+      if (!parsed.action || !parsed.data) {
+        parsed = {
+          action: "return_data",
+          data: { error: "Error in response", row: parsed },
+        };
+      }
     } catch (err) {
       return { error: "AI returned invalid JSON", row: ai.response };
     }
 
-    // Auto Wrap Raw Data (special cases for ai to self inprove on next step)
-    if (!parsed.action) {
-      parsed = {
-        action: "return_data",
-        raw: ai.response,
-        data: parsed,
-      };
-    }
-
-    // validate JSON shape to fallow set instructions
-    if (!parsed.action || !parsed.data) {
-      return {
-        error: "AI returned JSON but not in the required {action, data} format",
-        row: ai.response,
-      };
-    }
-
     const { action, data } = parsed;
     switch (action) {
-      // Scraps link wich is requested
+      // 1. Scraps link wich is requested
       case "scrape_page":
         lastResult = await scrapePage(data.url);
         break;
 
-      // 1.  Analize content (AI only step)
+      // 2.  Analize content (AI only step)
       case "analyze_content":
         lastResult = data.analysis || { status: "analysis complete" };
-        break;
-
-      // 2. update memory
-      case "update_memory":
-        updateMemory(data.key, data.value);
-        memory = loadMemory();
-        lastResult = { status: "memory updated" };
         break;
 
       //  3. Fallow Link (Ai decides next URL)
@@ -87,30 +75,9 @@ async function runAgent(userInput) {
         lastResult = await scrapePage(data.url);
         break;
 
-      // 4. Save memory (explicit save)
-      case "save_memory":
-        updateMemory(data.key, data.value);
-        memory = loadMemory();
-        break;
-
-      // 5. Load Memory (AI request memory refresh)
-      case "load_memory":
-        memory = loadMemory();
-        break;
-
-      // 6. Update Memory (Normal memory update)
-      case "update_memory":
-        updateMemory(data.key, data.value);
-        memory = loadMemory();
-        lastResult = { status: "memory updated" };
-        break;
-
-      // 7. Return data fallback wraper
+      // 4. Return data fallback wraper
       case "return_data":
-        updateMemory("last_result", data);
-        memory = loadMemory();
         lastResult = data;
-        continueLoop = false;
         break;
 
       // 8. finish scraping process
@@ -123,6 +90,12 @@ async function runAgent(userInput) {
       default:
         return { error: "Unknown action", action };
     }
+
+    // auto save in memory for next loop
+    updateMemory("last_result", lastResult);
+
+    // loads memory for next step
+    memory = loadMemory();
   }
   return lastResult;
 }

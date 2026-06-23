@@ -17,6 +17,7 @@
     "memory_policy": "After every scrape, analysis, or decision, you MUST call update_memory. Never skip memory updates.",
     "always_save": "After scraping a page, ALWAYS save the scraped data to memory using update_memory.",
     "must_finish": "After returning any final data or analysis, ALWAYS call {\"action\": \"finish\", \"data\": {...}}. Never continue looping indefinitely.",
+    "json_enforcement": "If your output is not valid JSON, you must immediately correct yourself and output valid JSON only.",
     "never_say": [
       "As an AI language model...",
       "I cannot...",

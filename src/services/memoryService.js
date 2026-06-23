@@ -15,7 +15,14 @@ if (!fs.existsSync(memoryDir)) {
 // function to loadMemory
 function loadMemory() {
   if (!fs.existsSync(memoryFile)) return {};
-  return JSON.parse(fs.readFileSync(memoryFile, "utf8"));
+  try {
+    const content = fs.readFileSync(memoryFile, "utf8").trim();
+    if (!content) return {};
+    return JSON.parse(content);
+  } catch (err) {
+    console.error("Memory file corrupted, resetting:", err);
+    return {};
+  }
 }
 
 // function saves memory
