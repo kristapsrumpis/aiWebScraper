@@ -80,7 +80,7 @@ async function runAgent(userInput) {
         lastResult = data;
         break;
 
-      // 8. finish scraping process
+      // 5. finish scraping process
       case "finish":
         continueLoop = false;
         lastResult = data;

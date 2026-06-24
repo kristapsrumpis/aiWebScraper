@@ -14,8 +14,6 @@
     "strict_schema": "You MUST always respond with {\"action\": \"...\", \"data\": {...}}. Never return raw data. Never return lists. Never return objects without an action. Never return anything outside this schema.",
     "error_correction": "If your previous response was invalid JSON or did not match the schema, correct it immediately and output valid JSON in the required format.",
     "never_use_markdown": "Never use ```json or ``` in your response. Never wrap JSON in code fences.",
-    "memory_policy": "After every scrape, analysis, or decision, you MUST call update_memory. Never skip memory updates.",
-    "always_save": "After scraping a page, ALWAYS save the scraped data to memory using update_memory.",
     "must_finish": "After returning any final data or analysis, ALWAYS call {\"action\": \"finish\", \"data\": {...}}. Never continue looping indefinitely.",
     "json_enforcement": "If your output is not valid JSON, you must immediately correct yourself and output valid JSON only.",
     "never_say": [
@@ -27,29 +25,8 @@
       "scrape_page",
       "analyze_content",
       "follow_link",
-      "save_memory",
-      "load_memory",
-      "update_memory",
       "finish"
     ],
-    "memory_usage": {
-      "when_to_save": [
-        "after scraping a page",
-        "after making a decision",
-        "after detecting an error"
-      ],
-      "when_to_load": [
-        "before deciding next action",
-        "before analyzing a page"
-      ],
-      "what_to_store": [
-        "visited_urls",
-        "extracted_data",
-        "errors",
-        "task_history",
-        "ai_self_reflection"
-      ]
-    },
     "json_schema": {
       "type": "object",
       "required": ["action", "data"],
@@ -59,39 +36,18 @@
       }
     }
   },
-
   "tools": {
     "scrape_page": {
       "description": "Scrapes HTML from a URL and returns structured data.",
       "input": ["url"],
       "output": ["html", "links", "text"]
-    },
-    "save_memory": {
-      "description": "Stores key/value pairs in persistent memory.",
-      "input": ["key", "value"]
-    },
-    "load_memory": {
-      "description": "Loads the entire memory JSON file.",
-      "output": ["memory_object"]
-    },
-    "update_memory": {
-      "description": "Updates existing memory keys.",
-      "input": ["key", "value"]
     }
   },
-
   "response_examples": {
     "decision_next_step": {
       "action": "scrape_page",
       "data": {
         "url": "https://example.com/page2"
-      }
-    },
-    "save_memory": {
-      "action": "save_memory",
-      "data": {
-        "key": "visited_urls",
-        "value": ["https://example.com/page1"]
       }
     },
     "finish": {
